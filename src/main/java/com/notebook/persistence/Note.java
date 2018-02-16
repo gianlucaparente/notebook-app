@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Note {
@@ -32,9 +28,21 @@ public class Note {
     @Column(nullable = true)
     private String address;
 
+    @OneToOne
+    private Contact contact;
+
 	public Note(Long id, String title) {
 		this.id = id;
 		this.title = title;
 	}
+
+    public Note(Long id, String title, String description, Date date, String address, Contact contact) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.address = address;
+        this.contact = contact;
+    }
 
 }
