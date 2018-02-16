@@ -31,10 +31,21 @@ public class Note {
     @OneToOne
     private Contact contact;
 
+    @OneToOne
+    private Reminder reminder;
+
 	public Note(Long id, String title) {
 		this.id = id;
 		this.title = title;
 	}
+
+    public Note(Long id, String title, String description, Date date, String address) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.address = address;
+    }
 
     public Note(Long id, String title, String description, Date date, String address, Contact contact) {
         this.id = id;
@@ -43,6 +54,16 @@ public class Note {
         this.date = date;
         this.address = address;
         this.contact = contact;
+    }
+
+    public Note(Long id, String title, String description, Date date, String address, Contact contact, Reminder reminder) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.address = address;
+        this.contact = contact;
+        this.reminder = reminder;
     }
 
 }

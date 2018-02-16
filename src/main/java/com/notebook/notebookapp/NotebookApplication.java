@@ -2,8 +2,10 @@ package com.notebook.notebookapp;
 
 import com.notebook.persistence.Contact;
 import com.notebook.persistence.Note;
+import com.notebook.persistence.Reminder;
 import com.notebook.repository.ContactRepository;
 import com.notebook.repository.NoteRepository;
+import com.notebook.repository.ReminderRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,16 +29,32 @@ public class NotebookApplication {
 	}
 
 	@Bean
-	ApplicationRunner run(ContactRepository contactRepository, NoteRepository noteRepository) {
+	ApplicationRunner run(
+			ContactRepository contactRepository,
+			NoteRepository noteRepository,
+			ReminderRepository reminderRepository) {
 		return args -> {
 
+			List<Reminder> reminders = this.createReminders(reminderRepository);
 			List<Contact> contacts = this.createContacts(contactRepository);
-			this.createNotes(contacts, noteRepository);
+			this.createNotes(contacts, reminders, noteRepository);
 
 //			Stream.of("Note1", "Note2")
 //					.forEach(x -> cr.save(new Note(null, x)));
 
 		};
+	}
+
+	private List<Reminder> createReminders(ReminderRepository reminderRepository) {
+		List<Reminder> reminders = new ArrayList<>();
+		Reminder reminder;
+
+		reminder = new Reminder(null, new Date());
+		reminders.add(reminder);
+
+		reminders.forEach(reminderRepository::save);
+
+		return reminders;
 	}
 
 	private List<Contact> createContacts(ContactRepository contactRepository) {
@@ -62,7 +80,7 @@ public class NotebookApplication {
 
 	}
 
-	private List<Note> createNotes(List<Contact> contacts, NoteRepository cr) {
+	private List<Note> createNotes(List<Contact> contacts, List<Reminder> reminders, NoteRepository cr) {
 
 		List<Note> notes = new ArrayList<>();
 		Note note;
