@@ -1,11 +1,11 @@
 package com.notebook.persistence;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -31,8 +31,8 @@ public class Note {
     @OneToOne
     private Contact contact;
 
-    @OneToOne
-    private Reminder reminder;
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Reminder> reminders;
 
 	public Note(Long id, String title) {
 		this.id = id;
@@ -56,14 +56,14 @@ public class Note {
         this.contact = contact;
     }
 
-    public Note(Long id, String title, String description, Date date, String address, Contact contact, Reminder reminder) {
+    public Note(Long id, String title, String description, Date date, String address, Contact contact, List<Reminder> reminders) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.date = date;
         this.address = address;
         this.contact = contact;
-        this.reminder = reminder;
+        this.reminders = reminders;
     }
 
 }

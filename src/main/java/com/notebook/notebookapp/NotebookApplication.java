@@ -5,7 +5,6 @@ import com.notebook.persistence.Note;
 import com.notebook.persistence.Reminder;
 import com.notebook.repository.ContactRepository;
 import com.notebook.repository.NoteRepository;
-import com.notebook.repository.ReminderRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,30 +30,16 @@ public class NotebookApplication {
 	@Bean
 	ApplicationRunner run(
 			ContactRepository contactRepository,
-			NoteRepository noteRepository,
-			ReminderRepository reminderRepository) {
+			NoteRepository noteRepository) {
 		return args -> {
 
-			List<Reminder> reminders = this.createReminders(reminderRepository);
 			List<Contact> contacts = this.createContacts(contactRepository);
-			this.createNotes(contacts, reminders, noteRepository);
+			this.createNotes(contacts, noteRepository);
 
 //			Stream.of("Note1", "Note2")
 //					.forEach(x -> cr.save(new Note(null, x)));
 
 		};
-	}
-
-	private List<Reminder> createReminders(ReminderRepository reminderRepository) {
-		List<Reminder> reminders = new ArrayList<>();
-		Reminder reminder;
-
-		reminder = new Reminder(null, new Date());
-		reminders.add(reminder);
-
-		reminders.forEach(reminderRepository::save);
-
-		return reminders;
 	}
 
 	private List<Contact> createContacts(ContactRepository contactRepository) {
@@ -80,7 +65,7 @@ public class NotebookApplication {
 
 	}
 
-	private List<Note> createNotes(List<Contact> contacts, List<Reminder> reminders, NoteRepository cr) {
+	private List<Note> createNotes(List<Contact> contacts, NoteRepository cr) {
 
 		List<Note> notes = new ArrayList<>();
 		Note note;
@@ -91,7 +76,10 @@ public class NotebookApplication {
 		note = new Note(null, "Promemoria Chiamare", null, new Date(2018, 2, 17), null, contacts.get(1));
 		notes.add(note);
 
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 18, 15, 0), "Via Tosi 3, Monza", contacts.get(1));
+		List<Reminder> reminders = new ArrayList<>();
+		reminders.add(new Reminder(null, new Date(2018, 2, 17, 9, 0)));
+		reminders.add(new Reminder(null, new Date(2018, 2, 17, 18, 0)));
+		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 18, 15, 0), "Via Tosi 3, Monza", contacts.get(1), reminders);
 		notes.add(note);
 
 		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 24, 14, 30), "Via Masaccio 1, Monza", contacts.get(0));

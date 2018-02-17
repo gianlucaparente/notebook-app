@@ -2,13 +2,12 @@ package com.notebook.persistence;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.notebook.util.Frequency;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.sql.Time;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -17,15 +16,14 @@ public class Reminder {
 
     @Id
     @GeneratedValue
-    protected Long id;
+    private Long id;
 
-    @Column
-    private Frequency frequency;
+    @Column(nullable = true)
+    private Date date;
 
-    @Column
-    protected Time date;
+    public Reminder(Long id, Date date) {
+        this.id = id;
+        this.date = date;
+    }
 
 }
-
-
-
