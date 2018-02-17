@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.List;
 @EnableJpaRepositories("com.notebook.repository")
 @ComponentScan(basePackages = {"com.notebook"})
 public class NotebookApplication {
+
+	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotebookApplication.class, args);
@@ -70,30 +74,38 @@ public class NotebookApplication {
 		List<Note> notes = new ArrayList<>();
 		Note note;
 
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 16, 18, 30), "Via Masaccio 1, Monza", contacts.get(0));
+		note = new Note(null, "Visita Casa", null, this.createDate(2018, 2, 16, 18, 30), "Via Masaccio 1, Monza", contacts.get(0));
 		notes.add(note);
 
-		note = new Note(null, "Promemoria Chiamare", null, new Date(2018, 2, 17), null, contacts.get(1));
+		note = new Note(null, "Promemoria Chiamare", null, this.createDate(2018, 2, 17, 0, 0), null, contacts.get(1));
 		notes.add(note);
 
 		List<Reminder> reminders = new ArrayList<>();
-		reminders.add(new Reminder(null, new Date(2018, 2, 17, 9, 0)));
-		reminders.add(new Reminder(null, new Date(2018, 2, 17, 18, 0)));
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 18, 15, 0), "Via Tosi 3, Monza", contacts.get(1), reminders);
+		reminders.add(new Reminder(null, this.createDate(2018, 2, 17, 9, 0)));
+		reminders.add(new Reminder(null, this.createDate(2018, 2, 17, 18, 0)));
+		note = new Note(null, "Visita Casa", null, this.createDate(2018, 2, 18, 15, 0), "Via Tosi 3, Monza", contacts.get(1), reminders);
 		notes.add(note);
 
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 24, 14, 30), "Via Masaccio 1, Monza", contacts.get(0));
+		note = new Note(null, "Visita Casa", null, this.createDate(2018, 2, 24, 14, 30), "Via Masaccio 1, Monza", contacts.get(0));
 		notes.add(note);
 
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 24, 15, 30), "Via Giorgio De Chirico 4, Monza", contacts.get(2));
+		note = new Note(null, "Visita Casa", null, this.createDate(2018, 2, 24, 15, 30), "Via Giorgio De Chirico 4, Monza", contacts.get(2));
 		notes.add(note);
 
-		note = new Note(null, "Visita Casa", null, new Date(2018, 2, 25, 15, 0), "Via Sant'Elia 2, Monza", contacts.get(3));
+		note = new Note(null, "Visita Casa", null, this.createDate(2018, 2, 25, 15, 0), "Via Sant'Elia 2, Monza", contacts.get(3));
 		notes.add(note);
 
 		notes.forEach(cr::save);
 
 		return notes;
+	}
+
+	private Date createDate(int year, int month, int day, int hours, int minutes) {
+		try {
+			return this.simpleDateFormat.parse(day + "/" + month + "/" + year + " " + hours + ":" + minutes);
+		} catch(ParseException pe) {
+			return null;
+		}
 	}
 
 }
