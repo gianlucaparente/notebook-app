@@ -3,6 +3,7 @@ package com.notebook.webservices;
 import com.notebook.persistence.Note;
 import com.notebook.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -20,7 +21,7 @@ public class NoteRestController {
 	@RequestMapping(method = RequestMethod.GET)
 	Collection<Note> getNotes() {
 		System.out.println("NoteRestController :: endpoint '/notes' called.");
-		return this.noteRepository.findAll();
+		return this.noteRepository.findAll(new Sort(Sort.Direction.DESC, "date"));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
