@@ -2,7 +2,6 @@ package com.notebook.persistence;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Note {
-
-    private boolean isExpired;
 
     @Id
 	@GeneratedValue
@@ -31,6 +28,9 @@ public class Note {
     @Column(nullable = true)
     private String address;
 
+    @Column(nullable = true)
+    private boolean expired;
+
     @OneToOne
     private Contact contact;
 
@@ -40,7 +40,7 @@ public class Note {
     public Note(Long id, String title) {
 		this.id = id;
 		this.title = title;
-        this.isExpired = this.isExpired();
+        this.expired = this.isExpired();
 	}
 
     public Note(Long id, String title, String description, Date date, String address) {
@@ -49,7 +49,7 @@ public class Note {
         this.description = description;
         this.date = date;
         this.address = address;
-        this.isExpired = this.isExpired();
+        this.expired = this.isExpired();
     }
 
     public Note(Long id, String title, String description, Date date, String address, Contact contact) {
@@ -59,7 +59,7 @@ public class Note {
         this.date = date;
         this.address = address;
         this.contact = contact;
-        this.isExpired = this.isExpired();
+        this.expired = this.isExpired();
     }
 
     public Note(Long id, String title, String description, Date date, String address, Contact contact, List<Reminder> reminders) {
@@ -70,11 +70,18 @@ public class Note {
         this.address = address;
         this.contact = contact;
         this.reminders = reminders;
-        this.isExpired = this.isExpired();
+        this.expired = this.isExpired();
     }
 
     public boolean isExpired() {
-        return new Date().after(this.date);
+        if (this.date != null) {
+            return new Date().after(this.date);
+        } else {
+            return false;
+        }
     }
 
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
 }
