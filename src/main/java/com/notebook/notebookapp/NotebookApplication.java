@@ -38,7 +38,7 @@ public class NotebookApplication {
 		return args -> {
 
 			List<Contact> contacts = this.createContacts(contactRepository);
-			this.createNotes(contacts, noteRepository);
+//			this.createNotes(contacts, noteRepository);
 
 //			Stream.of("Note1", "Note2")
 //					.forEach(x -> cr.save(new Note(null, x)));
