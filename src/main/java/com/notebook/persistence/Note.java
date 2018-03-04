@@ -25,6 +25,9 @@ public class Note {
     @Column(nullable = true)
     private Date date;
 
+    @Column(nullable = false)
+    private Date creationDate;
+
     @Column(nullable = true)
     private String address;
 
@@ -48,6 +51,7 @@ public class Note {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.creationDate = new Date();
         this.address = address;
         this.expired = this.isExpired();
     }
@@ -57,6 +61,7 @@ public class Note {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.creationDate = new Date();
         this.address = address;
         this.contact = contact;
         this.expired = this.isExpired();
@@ -67,6 +72,7 @@ public class Note {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.creationDate = new Date();
         this.address = address;
         this.contact = contact;
         this.reminders = reminders;
@@ -83,5 +89,13 @@ public class Note {
 
     public void setExpired(boolean expired) {
         this.expired = expired;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }
