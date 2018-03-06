@@ -62,6 +62,7 @@ public class NoteRestController {
     Note insertNote(@RequestBody Note note) {
 		System.out.println("NoteRestController :: endpoint '/notes/note' for insert a note");
 		note.setCreationDate(new Date());
+		note.setExpired(note.isExpired());
 		return this.noteRepository.save(note);
     }
 
