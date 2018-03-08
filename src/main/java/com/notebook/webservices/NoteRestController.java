@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.OrderBy;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import javax.xml.bind.DatatypeConverter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +46,15 @@ public class NoteRestController {
 		notesWithDate.addAll(notesWithoutDate);
 
 		return notesWithDate;
+	}
+
+	@CrossOrigin
+	@RequestMapping(value="expired/{expired}/date/{date}", method = RequestMethod.GET)
+	@OrderBy("date")
+	Collection<Note> getNotes(@PathVariable boolean expired, @PathVariable String date) {
+		System.out.println("NoteRestController :: endpoint '/notes/expired/date' with param " + expired + " and " + date + " called.");
+		Calendar calendar = DatatypeConverter.parseDateTime(date);
+		return this.noteRepository.findByExpiredAndDate(expired, calendar.getTime(), new Sort(Sort.Direction.ASC, "date"));
 	}
 
 	@CrossOrigin
