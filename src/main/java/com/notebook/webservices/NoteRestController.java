@@ -60,9 +60,9 @@ public class NoteRestController {
 		// Calculate start and end based on day
 		Calendar calendar = DatatypeConverter.parseDateTime(date);
 
-		calendar.clear(Calendar.HOUR);
-		calendar.clear(Calendar.MINUTE);
-		calendar.clear(Calendar.SECOND);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
 
 		Date start = calendar.getTime();
 
@@ -72,8 +72,13 @@ public class NoteRestController {
 
 		Date end = calendar.getTime();
 
+		System.out.println("NoteRestController :: filter notes from " + start + " to " + end);
+
 		// Filter by start and end dates
-		notes = notes.stream().filter(note -> note.getDate().after(start) && note.getDate().before(end)).collect(Collectors.toList());
+		notes = notes.stream().filter(note -> {
+			Date d = note.getDate();
+			return d != null && d.after(start) && d.before(end);
+		}).collect(Collectors.toList());
 
 		return notes;
 	}
