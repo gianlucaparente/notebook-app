@@ -53,8 +53,29 @@ public class NoteRestController {
 	@OrderBy("date")
 	Collection<Note> getNotes(@PathVariable boolean expired, @PathVariable String date) {
 		System.out.println("NoteRestController :: endpoint '/notes/expired/date' with param " + expired + " and " + date + " called.");
+
+		// Retrieve notes by expire
+		List<Note> notes = this.noteRepository.findByExpired(expired, new Sort(Sort.Direction.ASC, "date"));
+
+		// Calculate start and end based on day
 		Calendar calendar = DatatypeConverter.parseDateTime(date);
-		return this.noteRepository.findByExpiredAndDate(expired, calendar.getTime(), new Sort(Sort.Direction.ASC, "date"));
+
+		calendar.clear(Calendar.HOUR);
+		calendar.clear(Calendar.MINUTE);
+		calendar.clear(Calendar.SECOND);
+
+		Date start = calendar.getTime();
+
+		calendar.set(Calendar.HOUR, 24);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+
+		Date end = calendar.getTime();
+
+		// Filter by start and end dates
+		notes = notes.stream().filter(note -> note.getDate().after(start) && note.getDate().before(end)).collect(Collectors.toList());
+
+		return notes;
 	}
 
 	@CrossOrigin
